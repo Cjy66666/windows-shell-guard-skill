@@ -1,0 +1,3 @@
+display_name: Windows Shell Guard
+short_description: Prevent Windows shell command failures.
+default_prompt: Use $windows-shell-guard before running fragile Windows PowerShell, CMD, WSL, path, encoding, environment, or DLL/runtime commands.
