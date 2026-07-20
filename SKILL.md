@@ -16,6 +16,8 @@ Use this skill before running fragile commands on Windows. Treat it as a preflig
 
 2. Run static preflight for nontrivial commands.
    - Use `scripts/shell_guard_preflight.py` when a command contains nested quoting, shell redirection, environment setup, path-heavy arguments, `cmd /c`, WSL, DLL/runtime setup, or destructive verbs.
+   - Invoke the checker through an explicit Python interpreter, for example `python -B <skill-dir>\scripts\shell_guard_preflight.py --shell powershell --command "<command>" --strict`.
+   - Never execute the `.py` file path directly. On Windows, direct `.py` execution may follow file associations and open an editor such as VS Code instead of running Python.
    - Pass the intended shell with `--shell powershell`, `--shell cmd`, `--shell wsl`, or `--shell bash`.
    - Treat `ERROR` findings as blockers; fix the command before execution.
 
@@ -39,11 +41,12 @@ Use this skill before running fragile commands on Windows. Treat it as a preflig
 
 - Read `references/command-patterns.md` when constructing or translating commands.
 - Read `references/diagnosis-playbook.md` when a command fails, exits silently, shows garbled text, cannot find DLLs, cannot find `proj.db`, or behaves differently across PowerShell/CMD/WSL.
-- Run `scripts/shell_guard_preflight.py --help` to inspect available checks.
+- Run `python -B scripts/shell_guard_preflight.py --help` to inspect available checks.
 
 ## Hard Rules
 
 - Do not use Bash heredoc syntax such as `python - <<'PY'` in PowerShell.
+- Do not run `scripts\shell_guard_preflight.py` as a direct executable; call it with `python -B` or `py -3`.
 - Do not compose recursive delete or move operations across shells.
 - Do not assume Codex Desktop's visible terminal shell is the exact shell used for command execution on Windows.
 - Do not copy random DLLs from multiple toolchains into one executable directory without checking dependency compatibility.
