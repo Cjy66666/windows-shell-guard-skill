@@ -58,6 +58,19 @@ if ($LASTEXITCODE -ne 0) { throw "tool.exe failed with $LASTEXITCODE" }
 
 Avoid building one giant quoted string unless the target really requires shell parsing.
 
+## Preflight Checker Invocation
+
+On Windows, call the preflight checker through Python rather than executing the `.py` path directly:
+
+```powershell
+$Guard = '<skill-dir>\scripts\shell_guard_preflight.py'
+$Command = "& 'C:\Tools\tool.exe' --input 'C:\data\input.tif'"
+& python -B $Guard --shell powershell --command $Command --strict
+```
+
+If `python` is not the intended interpreter, use an explicit interpreter path or `py -3`.
+Do not run `& '<skill-dir>\scripts\shell_guard_preflight.py' ...`; direct `.py` execution can follow Windows file associations and open an editor such as VS Code.
+
 ## Environment Variables
 
 For the current PowerShell process:
