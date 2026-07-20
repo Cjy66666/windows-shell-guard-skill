@@ -53,10 +53,12 @@ On Windows, apply the $windows-shell-guard skill before shell work. For fragile 
 
 ## Preflight Usage
 
+Always invoke the checker through Python. Do not execute `.\scripts\shell_guard_preflight.py` directly on Windows, because `.py` file associations may open an editor instead of running Python.
+
 Inspect a PowerShell command:
 
 ```powershell
-python .\scripts\shell_guard_preflight.py --shell powershell --command "python - <<'PY'`nprint(1)`nPY" --strict
+python -B .\scripts\shell_guard_preflight.py --shell powershell --command "python - <<'PY'`nprint(1)`nPY" --strict
 ```
 
 Expected result:
@@ -69,7 +71,7 @@ Expected result:
 Inspect a Chinese path and encoding-sensitive read:
 
 ```powershell
-python .\scripts\shell_guard_preflight.py --shell powershell --command "Get-Content -Raw -LiteralPath 'D:\中文 路径\说明.txt'"
+python -B .\scripts\shell_guard_preflight.py --shell powershell --command "Get-Content -Raw -LiteralPath 'D:\中文 路径\说明.txt'"
 ```
 
 This should report informational findings about non-ASCII command content and missing explicit encoding.
@@ -79,7 +81,7 @@ This should report informational findings about non-ASCII command content and mi
 Run the local behavior tests:
 
 ```powershell
-python .\tests\test_shell_guard_preflight.py
+python -B .\tests\test_shell_guard_preflight.py
 ```
 
 Expected result:
@@ -91,7 +93,7 @@ all shell guard behavior tests passed
 If the skill-creator validator is available, also run:
 
 ```powershell
-python <path-to-skill-creator>\scripts\quick_validate.py .
+python -B <path-to-skill-creator>\scripts\quick_validate.py .
 ```
 
 ## Design Notes
